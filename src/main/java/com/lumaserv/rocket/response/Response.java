@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.javawebstack.webutils.Resource;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class Response {
@@ -14,10 +16,21 @@ public class Response {
     Object data;
 
     public <T> Response setData(Class<? extends Resource<T>> resourceType, T data) {
+
         return setData(resourceType, data, new Resource.Context());
     }
 
     public <T> Response setData(Class<? extends Resource<T>> resourceType, T data, Resource.Context context) {
+        setData(Resource.make(resourceType, data));
+        return this;
+    }
+
+    public <T> Response setData(Class<? extends Resource<T>> resourceType, List<T> data) {
+
+        return setData(resourceType, data, new Resource.Context());
+    }
+
+    public <T> Response setData(Class<? extends Resource<T>> resourceType, List<T> data, Resource.Context context) {
         setData(Resource.make(resourceType, data));
         return this;
     }

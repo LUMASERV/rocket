@@ -6,6 +6,7 @@ import org.javawebstack.orm.annotation.Column;
 import org.javawebstack.orm.annotation.Dates;
 import org.javawebstack.orm.annotation.SoftDelete;
 import org.javawebstack.orm.query.Query;
+import org.javawebstack.webutils.modelbind.ModelBind;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Setter
 @Dates
 @SoftDelete
+@ModelBind("indicator")
 public class Indicator extends Model {
 
     @Column

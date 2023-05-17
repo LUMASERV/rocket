@@ -28,11 +28,15 @@ public class Milestone extends Model {
     @Column
     Timestamp reachedAt;
     @Column
+    Timestamp estimatedAt;
+    @Column
     Timestamp createdAt;
     @Column
     Timestamp updatedAt;
     @Column
     Timestamp deletedAt;
+
+
 
     public enum State {
         INACTIVE,

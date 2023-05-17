@@ -68,6 +68,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         app.getEventBus().dispatch(new ObjectiveIndicatorDisconnectedEvent(objective, indicator));
     }
 
+
+
     public void deleteObjective(Objective objective) throws ServiceException {
         for(Milestone milestone : objective.milestones().get()) {
             app.getServices().getMilestoneService().deleteMilestone(milestone);
