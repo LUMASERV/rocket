@@ -4,15 +4,226 @@ x-stoplight:
 info:
   title: rocket
   version: '1.0'
+  description: API of the rocket milestone tracking tool
+  contact:
+    name: LUMASERV GmbH
+    email: info@lumaserv.com
+    url: 'https://lumaserv.com'
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
   - url: 'http://localhost:3000'
 paths:
   /indicators:
     get:
       summary: getIndicators
-      tags: []
-      responses: {}
+      tags:
+        - indicator
+      responses:
+        '200':
+          $ref: '#/components/responses/IndicatorListResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
       operationId: getIndicators
+      description: Returns a list of indicators
+      requestBody:
+        $ref: '#/components/requestBodies/CreateIndicatorRequest'
+    post:
+      summary: createIndicator
+      operationId: createIndicator
+      responses:
+        '201':
+          $ref: '#/components/responses/IndicatorSingleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      description: Creates a new indicator
+      tags:
+        - indicator
+  '/indicators/{id}':
+    get:
+      summary: getIndicator
+      tags:
+        - indicator
+      responses:
+        '200':
+          $ref: '#/components/responses/IndicatorSingleResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      operationId: getIndicator
+      description: Returns a single indicator
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Indicator ID
+    delete:
+      summary: deleteIndicator
+      operationId: deleteIndicator
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      tags:
+        - indicator
+      description: Deletes an indicator
+  /objectives:
+    get:
+      summary: getObjectives
+      responses:
+        '200':
+          $ref: '#/components/responses/ObjectiveListResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      operationId: getObjectives
+      description: Retrieves a list of objectives
+      tags:
+        - objective
+    post:
+      summary: createObjective
+      operationId: createObjective
+      responses:
+        '201':
+          $ref: '#/components/responses/ObjectiveSingleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      description: Creates a new objective
+      tags:
+        - objective
+      requestBody:
+        $ref: '#/components/requestBodies/CreateObjectiveRequest'
+  '/objectives/{id}':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Objective ID
+    get:
+      summary: getObjective
+      responses:
+        '200':
+          $ref: '#/components/responses/ObjectiveSingleResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      operationId: getObjective
+      description: Retrieves a single objective
+      tags:
+        - objective
+    delete:
+      summary: deleteObjective
+      operationId: deleteObjective
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      tags:
+        - objective
+      description: Deletes an objective
+  '/indicator-webhook/{token}':
+    parameters:
+      - schema:
+          type: string
+        name: token
+        in: path
+        required: true
+        description: Indicator Token
+    post:
+      summary: indicatorWebhook
+      operationId: indicatorWebhook
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      tags:
+        - indicator
+      description: Webhook for updating the indicator value
+      requestBody:
+        $ref: '#/components/requestBodies/IndicatorWebhookRequest'
+  /milestones:
+    get:
+      summary: getMilestones
+      tags:
+        - milestone
+      responses:
+        '200':
+          $ref: '#/components/responses/MilestoneListResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      operationId: getMilestones
+      description: Retrieves a list of milestones
+    post:
+      summary: createMilestone
+      operationId: createMilestone
+      responses:
+        '201':
+          $ref: '#/components/responses/MilestoneSingleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      description: Creates a new milestone for an objective
+      tags:
+        - milestone
+      requestBody:
+        $ref: '#/components/requestBodies/CreateMilestoneRequest'
+  '/milestones/{id}':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Milestone ID
+    get:
+      summary: getMilestone
+      tags:
+        - milestone
+      responses:
+        '200':
+          $ref: '#/components/responses/MilestoneSingleResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      operationId: getMilestone
+      description: Retrieves a single milestone
+    delete:
+      summary: deleteMilestone
+      operationId: deleteMilestone
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+      tags:
+        - milestone
+      description: Deletes a milestone
 components:
   schemas:
     Indicator:
@@ -104,8 +315,6 @@ components:
         value:
           type:
             - number
-            - integer
-            - boolean
           x-stoplight:
             id: nbpczunby9lb4
         created_at:
@@ -116,6 +325,7 @@ components:
         - id
         - project_id
         - name
+        - value
         - created_at
     Milestone:
       title: Milestone
@@ -139,14 +349,12 @@ components:
             - INACTIVE
             - ACTIVE
             - REACHED
-        target_value:
+        value:
           type:
             - number
-            - integer
-            - boolean
           x-stoplight:
             id: la3ynekocloyq
-        targetted_at:
+        estimated_at:
           type: string
           x-stoplight:
             id: nrwk9pyeknby1
@@ -162,7 +370,7 @@ components:
         - id
         - objective_id
         - state
-        - target_value
+        - value
         - created_at
     Team:
       title: Team
@@ -241,3 +449,294 @@ components:
             id: rvokphrh0ij4a
           enum:
             - SLACK
+  responses:
+    IndicatorSingleResponse:
+      description: Single Indicator
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: hytrxoty6f23t
+              data:
+                $ref: '#/components/schemas/Indicator'
+                x-stoplight:
+                  id: kisk4jvxmkvrv
+            required:
+              - success
+              - data
+    IndicatorListResponse:
+      description: Indicator List
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: jw70w53sxugae
+              data:
+                type: array
+                x-stoplight:
+                  id: 7c2uxkv7dnu93
+                items:
+                  $ref: '#/components/schemas/Indicator'
+                  x-stoplight:
+                    id: k3450ayac4aax
+            required:
+              - success
+              - data
+    UnauthorizedResponse:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: n2tqfr4nof6b2
+              error:
+                type: string
+                x-stoplight:
+                  id: r210olieq0xuz
+            required:
+              - success
+              - error
+    BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: 627s92nyavxu4
+              error:
+                type: string
+                x-stoplight:
+                  id: lezdfu9erzbc6
+            required:
+              - success
+              - error
+    SuccessResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: icpjgmh5mdwi0
+            required:
+              - success
+    NotFoundResponse:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: pdh07bl8vjepi
+              error:
+                type: string
+                x-stoplight:
+                  id: czwqi1gqjxsdq
+            required:
+              - success
+              - error
+    ServerErrorResponse:
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: 86duw44jnb9o6
+              error:
+                type: string
+                x-stoplight:
+                  id: i2k4qs199z26i
+            required:
+              - success
+              - error
+    ObjectiveSingleResponse:
+      description: Single Objective
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: vnyz0ke10hr4c
+              data:
+                $ref: '#/components/schemas/Objective'
+                x-stoplight:
+                  id: 90oe3uat5bzb4
+            required:
+              - success
+              - data
+    ObjectiveListResponse:
+      description: Objective List
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: 5ah1z16ih7lfb
+              data:
+                type: array
+                x-stoplight:
+                  id: m09hs70x5s18u
+                items:
+                  $ref: '#/components/schemas/Objective'
+                  x-stoplight:
+                    id: 9k2xczbd8dxvv
+            required:
+              - success
+              - data
+    MilestoneListResponse:
+      description: Milestone List
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: qvojnb4tfgyxc
+              data:
+                type: array
+                x-stoplight:
+                  id: 1r4yen08pif13
+                items:
+                  $ref: '#/components/schemas/Milestone'
+                  x-stoplight:
+                    id: ext6q4te4i165
+            required:
+              - success
+              - data
+    MilestoneSingleResponse:
+      description: Single Milestone
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                x-stoplight:
+                  id: efrlo4wxkyaw5
+              data:
+                $ref: '#/components/schemas/Milestone'
+                x-stoplight:
+                  id: jj65drbrtbpya
+            required:
+              - success
+              - data
+  requestBodies:
+    CreateIndicatorRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              project_id:
+                type: string
+                x-stoplight:
+                  id: hyeat5cyuipul
+                format: uuid
+              name:
+                type: string
+                x-stoplight:
+                  id: 5or8fq8utj0a7
+              value:
+                type: number
+                x-stoplight:
+                  id: wyj8s4r4bjiv4
+            required:
+              - project_id
+              - name
+              - value
+    CreateObjectiveRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              project_id:
+                type: string
+                x-stoplight:
+                  id: ln0lown1phqan
+                format: uuid
+              name:
+                type: string
+                x-stoplight:
+                  id: tmy295wvb6tmm
+              value:
+                type: number
+                x-stoplight:
+                  id: rixfe1iieb9xi
+              indicator_id:
+                type: string
+                x-stoplight:
+                  id: eurkrju1yxql6
+                format: uuid
+            required:
+              - project_id
+              - name
+    IndicatorWebhookRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              value:
+                type: number
+                x-stoplight:
+                  id: elqko0kis2rh6
+            required:
+              - value
+    CreateMilestoneRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              objective_id:
+                type: string
+                x-stoplight:
+                  id: fa4fv8x9ijnhw
+                format: uuid
+              value:
+                type: number
+                x-stoplight:
+                  id: ceu2pxhnwb2z2
+tags:
+  - name: indicator
+    description: Indicators
+  - name: milestone
+    description: Milestones
+  - name: objective
+    description: Objectives
