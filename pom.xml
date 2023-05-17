@@ -26,6 +26,11 @@
             <version>1.0.1</version>
         </dependency>
         <dependency>
+            <groupId>org.javawebstack</groupId>
+            <artifactId>http-client</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.28</version>
