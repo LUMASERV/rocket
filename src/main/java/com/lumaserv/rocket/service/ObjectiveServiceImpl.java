@@ -4,6 +4,8 @@ import com.lumaserv.rocket.RocketApp;
 import com.lumaserv.rocket.event.objective.*;
 import com.lumaserv.rocket.model.*;
 import lombok.AllArgsConstructor;
+import org.omg.PortableInterceptor.ACTIVE;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.List;
 
@@ -43,12 +45,20 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         double oldValue = objective.getValue();
         objective.setValue(value).save();
         app.getEventBus().dispatch(new ObjectiveValueUpdatedEvent(objective, oldValue, cause));
+        // Complete reached milestones
         List<Milestone> milestones = objective.milestones()
                 .where("state", "!=", Milestone.State.REACHED)
                 .where("value", "<=", value)
                 .get();
         for(Milestone m : milestones) {
             app.getServices().getMilestoneService().completeMilestone(m);
+        }
+        // If no milestone is active anymore, activate the next one
+        if(!objective.milestones().where("state", Milestone.State.ACTIVE).hasRecords()) {
+            Milestone next = objective.milestones().where("state", Milestone.State.INACTIVE).first();
+            if(next != null) {
+                next.setState(Milestone.State.ACTIVE).save();
+            }
         }
     }
 
