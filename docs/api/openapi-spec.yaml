@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.0
 x-stoplight:
   id: yo1toyuwh79ch
 info:
@@ -27,8 +27,6 @@ paths:
           $ref: '#/components/responses/ServerErrorResponse'
       operationId: getIndicators
       description: Returns a list of indicators
-      requestBody:
-        $ref: '#/components/requestBodies/CreateIndicatorRequest'
     post:
       summary: createIndicator
       operationId: createIndicator
@@ -42,6 +40,8 @@ paths:
       description: Creates a new indicator
       tags:
         - indicator
+      requestBody:
+        $ref: '#/components/requestBodies/CreateIndicatorRequest'
   '/indicators/{id}':
     get:
       summary: getIndicator
@@ -252,10 +252,7 @@ components:
             - NUMBER
             - BOOLEAN
         value:
-          type:
-            - integer
-            - number
-            - boolean
+          type: number
           x-stoplight:
             id: 4w1ixqc6dwo90
         created_at:
@@ -313,8 +310,7 @@ components:
             id: 9sdlgubsdx9qx
           format: uuid
         value:
-          type:
-            - number
+          type: number
           x-stoplight:
             id: nbpczunby9lb4
         created_at:
@@ -350,8 +346,7 @@ components:
             - ACTIVE
             - REACHED
         value:
-          type:
-            - number
+          type: number
           x-stoplight:
             id: la3ynekocloyq
         estimated_at:
