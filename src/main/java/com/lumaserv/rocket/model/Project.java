@@ -19,6 +19,8 @@ public class Project extends Model {
     @Column
     UUID id;
     @Column
+    String name;
+    @Column
     Timestamp createdAt;
     @Column
     Timestamp updatedAt;

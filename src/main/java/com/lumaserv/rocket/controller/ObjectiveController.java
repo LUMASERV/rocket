@@ -22,9 +22,11 @@ import java.util.List;
 
 @PathPrefix("objectives")
 public class ObjectiveController extends Controller {
+
     private ObjectiveService getObjectiveService() {
         return getApp().getServices().getObjectiveService();
     }
+
     @Post
     public Response create(Exchange exchange, CreateObjectiveRequest request) {
         Project project = Repo.get(Project.class)

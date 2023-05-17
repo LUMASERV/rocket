@@ -43,14 +43,12 @@ public class IndicatorController extends Controller {
 
     @Delete("{indicator:indicator}")
     public Response delete(@Path("indicator") Indicator indicator) {
-
         try {
             getIndicatorService().deleteIndicator(indicator, true);
             return Response.success();
         } catch (ServiceException exception) {
             return Response.error(500, exception.getMessage());
         }
-
     }
 
     @Get("{indicator:indicator}")

@@ -4,6 +4,7 @@ import com.lumaserv.rocket.controller.Controller;
 import com.lumaserv.rocket.event.EventBus;
 import com.lumaserv.rocket.model.Model;
 import com.lumaserv.rocket.service.Services;
+import com.lumaserv.rocket.util.CustomAutoInjector;
 import com.lumaserv.rocket.util.DefaultAccessible;
 import lombok.Getter;
 import org.javawebstack.httpserver.HTTPServer;
@@ -44,6 +45,7 @@ public class RocketApp {
                 .port(config.getInt("http.port", 80))
                 .routeParamTransformer(new ModelBindParamTransformer())
                 .controller(Controller.class, Controller.class.getPackage())
+                .routeAutoInjector(new CustomAutoInjector())
                 .responseTransformer(new SerializedResponseTransformer());
     }
 
