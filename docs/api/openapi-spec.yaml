@@ -1,0 +1,243 @@
+openapi: 3.1.0
+x-stoplight:
+  id: yo1toyuwh79ch
+info:
+  title: rocket
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /indicators:
+    get:
+      summary: getIndicators
+      tags: []
+      responses: {}
+      operationId: getIndicators
+components:
+  schemas:
+    Indicator:
+      title: Indicator
+      x-stoplight:
+        id: i66nfo6ud4psb
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          x-stoplight:
+            id: 300hfxdmmasd4
+          format: uuid
+        name:
+          type: string
+          x-stoplight:
+            id: ukcj7sdfo4zep
+        type:
+          type: string
+          x-stoplight:
+            id: wk71hemak8qce
+          enum:
+            - NUMBER
+            - BOOLEAN
+        value:
+          type:
+            - integer
+            - number
+            - boolean
+          x-stoplight:
+            id: 4w1ixqc6dwo90
+        created_at:
+          type: string
+          x-stoplight:
+            id: 02ttygkpxlmpx
+      required:
+        - id
+        - project_id
+        - name
+        - type
+        - value
+        - created_at
+    Project:
+      title: Project
+      x-stoplight:
+        id: o12ubsm4ak3gt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          x-stoplight:
+            id: ln45mw9hurlq8
+      required:
+        - id
+        - name
+    Objective:
+      title: Objective
+      x-stoplight:
+        id: saws97v95tqil
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          x-stoplight:
+            id: erafww230p3op
+          format: uuid
+        name:
+          type: string
+          x-stoplight:
+            id: jeuuskf08qxkt
+        description:
+          type: string
+          x-stoplight:
+            id: 36a8qlr3kcp9t
+        indicator_id:
+          type: string
+          x-stoplight:
+            id: 9sdlgubsdx9qx
+          format: uuid
+        value:
+          type:
+            - number
+            - integer
+            - boolean
+          x-stoplight:
+            id: nbpczunby9lb4
+        created_at:
+          type: string
+          x-stoplight:
+            id: grweefx058uz5
+      required:
+        - id
+        - project_id
+        - name
+        - created_at
+    Milestone:
+      title: Milestone
+      x-stoplight:
+        id: dvxl4en1w9q7m
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        objective_id:
+          type: string
+          x-stoplight:
+            id: d1xjj5hf72mwx
+          format: uuid
+        state:
+          type: string
+          x-stoplight:
+            id: d1ynk6o4iaug6
+          enum:
+            - INACTIVE
+            - ACTIVE
+            - REACHED
+        target_value:
+          type:
+            - number
+            - integer
+            - boolean
+          x-stoplight:
+            id: la3ynekocloyq
+        targetted_at:
+          type: string
+          x-stoplight:
+            id: nrwk9pyeknby1
+        reached_at:
+          type: string
+          x-stoplight:
+            id: e15zr0bo4mw4h
+        created_at:
+          type: string
+          x-stoplight:
+            id: q6q9mp9bum3nc
+      required:
+        - id
+        - objective_id
+        - state
+        - target_value
+        - created_at
+    Team:
+      title: Team
+      x-stoplight:
+        id: 95tnei4hvez4e
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          x-stoplight:
+            id: ixmure6sf2cg6
+      required:
+        - id
+    TeamMember:
+      title: TeamMember
+      x-stoplight:
+        id: xge8p4i3moto1
+      type: object
+      properties:
+        user_id:
+          type: string
+          x-stoplight:
+            id: tmrohfjlx8doe
+          format: uuid
+        role:
+          type: string
+          x-stoplight:
+            id: h7jjzk5klt2w6
+          enum:
+            - LEADER
+            - MANAGER
+            - MEMBER
+      required:
+        - user_id
+        - role
+    User:
+      title: User
+      x-stoplight:
+        id: fjjaqzxbcno93
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          x-stoplight:
+            id: khlgyhyqh8wbl
+        created_at:
+          type: string
+          x-stoplight:
+            id: 1vtix8mxxjfq4
+      required:
+        - id
+        - name
+        - created_at
+    NotificationChannel:
+      title: NotificationChannel
+      x-stoplight:
+        id: 4tam04hjxckeb
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          x-stoplight:
+            id: xztzu1bl0xhjq
+        type:
+          type: string
+          x-stoplight:
+            id: rvokphrh0ij4a
+          enum:
+            - SLACK
