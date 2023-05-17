@@ -2,10 +2,11 @@ package com.lumaserv.rocket.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.javawebstack.abstractdata.AbstractObject;
 import org.javawebstack.orm.annotation.Column;
 import org.javawebstack.orm.annotation.Dates;
 import org.javawebstack.orm.annotation.SoftDelete;
-import org.javawebstack.orm.query.Query;
+import org.javawebstack.webutils.modelbind.ModelBind;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -14,12 +15,17 @@ import java.util.UUID;
 @Setter
 @Dates
 @SoftDelete
-public class Project extends Model {
+@ModelBind("notificationchannel")
+public class NotificationChannel extends Model {
 
     @Column
     UUID id;
     @Column
     String name;
+    @Column
+    Type type;
+    @Column
+    AbstractObject config;
     @Column
     Timestamp createdAt;
     @Column
@@ -27,16 +33,8 @@ public class Project extends Model {
     @Column
     Timestamp deletedAt;
 
-    public Query<NotificationChannel> notificationChannels() {
-        return belongsToMany(NotificationChannel.class, ProjectNotificationChannel.class);
-    }
-
-    public Query<Objective> objectives() {
-        return hasMany(Objective.class);
-    }
-
-    public Query<Indicator> indicators() {
-        return hasMany(Indicator.class);
+    public enum Type {
+        SLACK
     }
 
 }

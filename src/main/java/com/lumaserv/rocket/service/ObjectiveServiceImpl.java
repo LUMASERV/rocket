@@ -2,11 +2,10 @@ package com.lumaserv.rocket.service;
 
 import com.lumaserv.rocket.RocketApp;
 import com.lumaserv.rocket.event.objective.*;
-import com.lumaserv.rocket.model.Indicator;
-import com.lumaserv.rocket.model.Milestone;
-import com.lumaserv.rocket.model.Objective;
-import com.lumaserv.rocket.model.Project;
+import com.lumaserv.rocket.model.*;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 public class ObjectiveServiceImpl implements ObjectiveService {
@@ -33,15 +32,24 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     public void updateObjectiveValue(Objective objective, double value) throws ServiceException {
-        double oldValue = objective.getValue();
-        objective.setValue(value).save();
-        app.getEventBus().dispatch(new ObjectiveValueUpdatedEvent(objective, oldValue, ObjectiveValueUpdatedEvent.Cause.MANUAL));
+        updateObjectiveValue(objective, value, ObjectiveValueUpdatedEvent.Cause.MANUAL);
     }
 
     public void updateObjectiveValue(Objective objective, Indicator indicator) throws ServiceException {
+        updateObjectiveValue(objective, indicator.getValue(), ObjectiveValueUpdatedEvent.Cause.INDICATOR);
+    }
+
+    private void updateObjectiveValue(Objective objective, double value, ObjectiveValueUpdatedEvent.Cause cause) throws ServiceException {
         double oldValue = objective.getValue();
-        objective.setValue(indicator.getValue()).save();
-        app.getEventBus().dispatch(new ObjectiveValueUpdatedEvent(objective, oldValue, ObjectiveValueUpdatedEvent.Cause.INDICATOR));
+        objective.setValue(value).save();
+        app.getEventBus().dispatch(new ObjectiveValueUpdatedEvent(objective, oldValue, cause));
+        List<Milestone> milestones = objective.milestones()
+                .where("state", "!=", Milestone.State.REACHED)
+                .where("value", "<=", value)
+                .get();
+        for(Milestone m : milestones) {
+            app.getServices().getMilestoneService().completeMilestone(m);
+        }
     }
 
     public void connectObjectiveIndicator(Objective objective, Indicator indicator) throws ServiceException {
