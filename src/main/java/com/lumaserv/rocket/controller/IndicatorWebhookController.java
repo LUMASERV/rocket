@@ -2,9 +2,7 @@ package com.lumaserv.rocket.controller;
 
 
 import com.lumaserv.rocket.model.Indicator;
-import com.lumaserv.rocket.model.Project;
 import com.lumaserv.rocket.request.indicator.IndicatorWebhookRequest;
-import com.lumaserv.rocket.resource.IndicatorResource;
 import com.lumaserv.rocket.response.Response;
 import com.lumaserv.rocket.service.ServiceException;
 import org.javawebstack.httpserver.router.annotation.PathPrefix;
