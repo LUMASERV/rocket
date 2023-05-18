@@ -2,10 +2,11 @@ package com.lumaserv.rocket.service;
 
 import com.lumaserv.rocket.RocketApp;
 import com.lumaserv.rocket.event.objective.*;
-import com.lumaserv.rocket.model.*;
+import com.lumaserv.rocket.model.Indicator;
+import com.lumaserv.rocket.model.Milestone;
+import com.lumaserv.rocket.model.Objective;
+import com.lumaserv.rocket.model.Project;
 import lombok.AllArgsConstructor;
-import org.omg.PortableInterceptor.ACTIVE;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     public Objective createObjective(Project project, String name, double value) throws ServiceException {
         // Validate that there is no existing objective with this name in the same project
-        if(project.objectives().where("name", name).hasRecords()) {
+        if (project.objectives().where("name", name).hasRecords()) {
             throw new ServiceException("An objective with this name already exists in the project");
         }
 
@@ -50,13 +51,13 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 .where("state", "!=", Milestone.State.REACHED)
                 .where("value", "<=", value)
                 .get();
-        for(Milestone m : milestones) {
+        for (Milestone m : milestones) {
             app.getServices().getMilestoneService().completeMilestone(m);
         }
         // If no milestone is active anymore, activate the next one
-        if(!objective.milestones().where("state", Milestone.State.ACTIVE).hasRecords()) {
+        if (!objective.milestones().where("state", Milestone.State.ACTIVE).hasRecords()) {
             Milestone next = objective.milestones().where("state", Milestone.State.INACTIVE).first();
-            if(next != null) {
+            if (next != null) {
                 next.setState(Milestone.State.ACTIVE).save();
             }
         }
@@ -65,7 +66,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public void connectObjectiveIndicator(Objective objective, Indicator indicator) throws ServiceException {
         Indicator oldIndicator = objective.indicator().first();
         // Disconnect current indicator
-        if(oldIndicator != null) {
+        if (oldIndicator != null) {
             objective.setIndicatorId(null).save();
             app.getEventBus().dispatch(new ObjectiveIndicatorDisconnectedEvent(objective, indicator));
         }
@@ -80,16 +81,15 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     public void disconnectObjectiveIndicator(Objective objective) throws ServiceException {
         Indicator indicator = objective.indicator().first();
-        if(indicator == null)
+        if (indicator == null)
             throw new ServiceException("Objective is not connected to any indicator");
         objective.setIndicatorId(null).save();
         app.getEventBus().dispatch(new ObjectiveIndicatorDisconnectedEvent(objective, indicator));
     }
 
 
-
     public void deleteObjective(Objective objective) throws ServiceException {
-        for(Milestone milestone : objective.milestones().get()) {
+        for (Milestone milestone : objective.milestones().get()) {
             app.getServices().getMilestoneService().deleteMilestone(milestone);
         }
         objective.delete();

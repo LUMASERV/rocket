@@ -3,9 +3,9 @@ package com.lumaserv.rocket.service;
 import com.lumaserv.rocket.model.Team;
 import org.javawebstack.orm.Repo;
 
-public class TeamServiceImpl implements TeamService{
+public class TeamServiceImpl implements TeamService {
     public Team createTeam(String name) throws ServiceException {
-        if(Repo.get(Team.class).query().where("name",name).hasRecords()){
+        if (Repo.get(Team.class).query().where("name", name).hasRecords()) {
             throw new ServiceException("A team with this name already exists.");
         }
 

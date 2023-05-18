@@ -30,7 +30,7 @@ public class IndicatorController extends Controller {
                 .accessible(exchange)
                 .whereId(request.getProjectId())
                 .first();
-        if(project == null)
+        if (project == null)
             return Response.error(400, "Project not found");
 
         try {
@@ -52,13 +52,13 @@ public class IndicatorController extends Controller {
     }
 
     @Get("{indicator:indicator}")
-    public Response get(Exchange exchange, @Path("indicator") Indicator indicator){
+    public Response get(Exchange exchange, @Path("indicator") Indicator indicator) {
         return Response.success().setData(IndicatorResource.class, indicator);
     }
 
     @Get
     public Response getAll() {
         List<Indicator> indicatorList = Repo.get(Indicator.class).query().all();
-        return Response.success().setData(IndicatorResource.class,indicatorList);
+        return Response.success().setData(IndicatorResource.class, indicatorList);
     }
 }

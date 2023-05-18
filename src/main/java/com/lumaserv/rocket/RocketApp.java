@@ -52,6 +52,7 @@ public class RocketApp {
     public void start() {
         server.start().join();
     }
+
     public void setupDatabase() throws ORMConfigurationException {
         SQL sql = new MySQL(
                 config.get("database.host"),
@@ -65,7 +66,7 @@ public class RocketApp {
                 .addTypeMapper(new AbstractDataTypeMapper());
 
         Accessible accessible = new DefaultAccessible();
-        ORM.register(Model.class.getPackage(),sql,ormConfig);
+        ORM.register(Model.class.getPackage(), sql, ormConfig);
         ORM.getRepos().forEach(r -> r.setAccessible(accessible));
         ORM.autoMigrate();
     }

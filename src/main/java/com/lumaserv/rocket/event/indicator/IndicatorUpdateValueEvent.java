@@ -13,7 +13,8 @@ public class IndicatorUpdateValueEvent extends Event implements Cancellable {
     final Indicator indicator;
     @Setter
     double newValue;
-    @Setter @Accessors(chain = false)
+    @Setter
+    @Accessors(chain = false)
     boolean cancelled;
 
     public IndicatorUpdateValueEvent(Indicator indicator, double newValue) {

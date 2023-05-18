@@ -2,10 +2,8 @@ package com.lumaserv.rocket.controller;
 
 import com.lumaserv.rocket.model.Milestone;
 import com.lumaserv.rocket.model.Objective;
-import com.lumaserv.rocket.model.Project;
-import com.lumaserv.rocket.request.indicator.CreateMilestoneRequest;
+import com.lumaserv.rocket.request.milestone.CreateMilestoneRequest;
 import com.lumaserv.rocket.resource.MilestoneResource;
-import com.lumaserv.rocket.resource.ObjectiveResource;
 import com.lumaserv.rocket.response.Response;
 import com.lumaserv.rocket.service.MilestoneService;
 import com.lumaserv.rocket.service.ServiceException;
@@ -32,36 +30,36 @@ public class MilestoneController extends Controller {
                 .whereId(request.getObjectiveId())
                 .first();
 
-        if(objective == null) {
-            return Response.error(400,"Objective not found.");
+        if (objective == null) {
+            return Response.error(400, "Objective not found.");
         }
 
         try {
             Milestone milestone = getMilestoneService().createMilestone(objective, request.getName(), request.getValue() != null ? request.getValue() : 0);
-            return Response.created(MilestoneResource.class,milestone);
+            return Response.created(MilestoneResource.class, milestone);
         } catch (ServiceException exception) {
-            return Response.error(500,exception.getMessage());
+            return Response.error(500, exception.getMessage());
         }
     }
 
     @Delete("{milestone:milestone}")
-    public Response delete(@Path("milestone") Milestone milestone){
-        try{
+    public Response delete(@Path("milestone") Milestone milestone) {
+        try {
             getMilestoneService().deleteMilestone(milestone);
             return Response.success();
         } catch (ServiceException exception) {
-            return Response.error(500,exception.getMessage());
+            return Response.error(500, exception.getMessage());
         }
     }
 
     @Get("{milestone:milestone}")
-    public Response get(Exchange exchange, @Path("milestone") Milestone milestone){
-        return Response.success().setData(MilestoneResource.class,milestone);
+    public Response get(Exchange exchange, @Path("milestone") Milestone milestone) {
+        return Response.success().setData(MilestoneResource.class, milestone);
     }
 
     @Get
-    public Response getAll(){
+    public Response getAll() {
         List<Milestone> milestoneList = Repo.get(Milestone.class).query().all();
-        return Response.success().setData(MilestoneResource.class,milestoneList);
+        return Response.success().setData(MilestoneResource.class, milestoneList);
     }
 }

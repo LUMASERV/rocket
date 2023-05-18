@@ -24,7 +24,7 @@ public class NotificationChannelController extends Controller {
 
     @Post
     public Response create(CreateNotificationChannelRequest request) {
-        if(Repo.get(NotificationChannel.class).query().where("name", request.getName()).hasRecords()) {
+        if (Repo.get(NotificationChannel.class).query().where("name", request.getName()).hasRecords()) {
             return Response.error(400, "A notification channel with this name already exists");
         }
         NotificationChannel channel = new NotificationChannel()

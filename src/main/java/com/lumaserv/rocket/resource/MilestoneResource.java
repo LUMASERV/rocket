@@ -1,6 +1,5 @@
 package com.lumaserv.rocket.resource;
 
-import com.lumaserv.rocket.model.Indicator;
 import com.lumaserv.rocket.model.Milestone;
 import org.javawebstack.webutils.Resource;
 

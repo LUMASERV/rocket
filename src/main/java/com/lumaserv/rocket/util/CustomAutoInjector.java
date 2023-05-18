@@ -8,7 +8,7 @@ import java.util.Map;
 public class CustomAutoInjector implements RouteAutoInjector {
 
     public Object getValue(Exchange exchange, Map<String, Object> map, Class<?> type) {
-        if(type.getPackage().getName().startsWith("com.lumaserv.rocket.request")) {
+        if (type.getPackage().getName().startsWith("com.lumaserv.rocket.request")) {
             return exchange.body(type);
         }
         return null;

@@ -2,11 +2,9 @@ package com.lumaserv.rocket.controller;
 
 import com.lumaserv.rocket.model.Objective;
 import com.lumaserv.rocket.model.Project;
-import com.lumaserv.rocket.request.indicator.CreateObjectiveRequest;
-import com.lumaserv.rocket.resource.IndicatorResource;
+import com.lumaserv.rocket.request.objective.CreateObjectiveRequest;
 import com.lumaserv.rocket.resource.ObjectiveResource;
 import com.lumaserv.rocket.response.Response;
-import com.lumaserv.rocket.service.IndicatorService;
 import com.lumaserv.rocket.service.ObjectiveService;
 import com.lumaserv.rocket.service.ServiceException;
 import org.javawebstack.httpserver.Exchange;
@@ -33,7 +31,7 @@ public class ObjectiveController extends Controller {
                 .accessible(exchange)
                 .whereId(request.getProjectId())
                 .first();
-        if(project == null)
+        if (project == null)
             return Response.error(400, "Project not found.");
 
         try {
@@ -45,23 +43,23 @@ public class ObjectiveController extends Controller {
     }
 
     @Delete("{objective:objective}")
-    public Response delete(@Path("objective") Objective objective){
-        try{
+    public Response delete(@Path("objective") Objective objective) {
+        try {
             getObjectiveService().deleteObjective(objective);
             return Response.success();
-        } catch(ServiceException exception){
+        } catch (ServiceException exception) {
             return Response.error(500, exception.getMessage());
         }
     }
 
     @Get("{objective:objective}")
-    public Response get(Exchange exchange,@Path("objective") Objective objective){
-        return Response.success().setData(ObjectiveResource.class,objective);
+    public Response get(Exchange exchange, @Path("objective") Objective objective) {
+        return Response.success().setData(ObjectiveResource.class, objective);
     }
 
     @Get
-    public Response getAll(){
+    public Response getAll() {
         List<Objective> objectiveList = Repo.get(Objective.class).query().all();
-        return Response.success().setData(ObjectiveResource.class,objectiveList);
+        return Response.success().setData(ObjectiveResource.class, objectiveList);
     }
 }

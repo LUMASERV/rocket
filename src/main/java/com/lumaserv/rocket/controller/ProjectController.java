@@ -2,7 +2,7 @@ package com.lumaserv.rocket.controller;
 
 
 import com.lumaserv.rocket.model.Project;
-import com.lumaserv.rocket.request.indicator.CreateProjectRequest;
+import com.lumaserv.rocket.request.project.CreateProjectRequest;
 import com.lumaserv.rocket.resource.ProjectResource;
 import com.lumaserv.rocket.response.Response;
 import com.lumaserv.rocket.service.ProjectService;
@@ -20,33 +20,33 @@ import java.util.List;
 @PathPrefix("projects")
 public class ProjectController extends Controller {
 
-    private ProjectService getProjectService(){
+    private ProjectService getProjectService() {
         return getApp().getServices().getProjectService();
     }
 
     @Post
-    public Response create(Exchange exchange, CreateProjectRequest request){
+    public Response create(Exchange exchange, CreateProjectRequest request) {
         try {
             Project project = getProjectService().createProject(request.getName());
-            return Response.created(ProjectResource.class,project);
+            return Response.created(ProjectResource.class, project);
         } catch (ServiceException exception) {
-            return Response.error(500,exception.getMessage());
+            return Response.error(500, exception.getMessage());
         }
     }
 
     @Delete("{project:project}")
-    public Response delete(@Path("project") Project project){
+    public Response delete(@Path("project") Project project) {
         try {
-            getProjectService().deleteProject(project,true);
+            getProjectService().deleteProject(project, true);
             return Response.success();
         } catch (ServiceException exception) {
-            return Response.error(500,exception.getMessage());
+            return Response.error(500, exception.getMessage());
         }
     }
 
     @Get("{project:project}")
     public Response get(Exchange exchange, @Path("project") Project project) {
-        return Response.success().setData(ProjectResource.class,project);
+        return Response.success().setData(ProjectResource.class, project);
     }
 
     @Get

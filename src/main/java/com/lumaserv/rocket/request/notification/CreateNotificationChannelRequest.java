@@ -10,7 +10,7 @@ import org.javawebstack.validator.rule.StringRule;
 public class CreateNotificationChannelRequest {
 
     @RequiredRule
-    @StringRule(min=2, max=50)
+    @StringRule(min = 2, max = 50)
     String name;
     @RequiredRule
     NotificationChannel.Type type;

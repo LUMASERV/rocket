@@ -19,11 +19,11 @@ public class EventBus {
     }
 
     public <T extends Event> T dispatch(T event) {
-        for(EventSubscription<?> s : new ArrayList<>(subscriptions)) {
-            if(s.getType().isAssignableFrom(event.getClass())) {
+        for (EventSubscription<?> s : new ArrayList<>(subscriptions)) {
+            if (s.getType().isAssignableFrom(event.getClass())) {
                 EventSubscription<T> sub = (EventSubscription<T>) s;
                 sub.getCallback().accept(event);
-                if(event instanceof Cancellable && ((Cancellable) event).isCancelled())
+                if (event instanceof Cancellable && ((Cancellable) event).isCancelled())
                     break;
             }
         }

@@ -19,7 +19,7 @@ public class IndicatorServiceImpl implements IndicatorService {
 
     public Indicator createIndicator(Project project, String name, double value) throws ServiceException {
         // Validate that there is no existing indicator with this name in the same project
-        if(project.indicators().where("name", name).hasRecords()) {
+        if (project.indicators().where("name", name).hasRecords()) {
             throw new ServiceException("An indicator with this name already exists in the project");
         }
 
@@ -44,14 +44,14 @@ public class IndicatorServiceImpl implements IndicatorService {
     }
 
     public void deleteIndicator(Indicator indicator, boolean force) throws ServiceException {
-        if(!force) {
+        if (!force) {
             // Check if the indicator is used by any objective
-            if(indicator.objectives().hasRecords()) {
+            if (indicator.objectives().hasRecords()) {
                 throw new ServiceException("The indicator is in use by one ore more objectives");
             }
         } else {
             // Disconnect objectives from indicator
-            for(Objective objective : indicator.objectives().get()) {
+            for (Objective objective : indicator.objectives().get()) {
                 app.getServices().getObjectiveService().disconnectObjectiveIndicator(objective);
             }
         }
@@ -68,7 +68,7 @@ public class IndicatorServiceImpl implements IndicatorService {
         double oldValue = indicator.getValue();
 
         // Cancel if value didn't change
-        if(oldValue == value)
+        if (oldValue == value)
             return;
 
         // Dispatch update event
@@ -76,7 +76,7 @@ public class IndicatorServiceImpl implements IndicatorService {
         app.getEventBus().dispatch(updateEvent);
 
         // Cancel if event has been cancelled
-        if(updateEvent.isCancelled())
+        if (updateEvent.isCancelled())
             return;
 
         // Set new value
@@ -90,7 +90,7 @@ public class IndicatorServiceImpl implements IndicatorService {
         app.getEventBus().dispatch(new IndicatorValueUpdatedEvent(indicator, update, oldValue));
 
         // Update objectives connected to this indicator
-        for(Objective objective : indicator.objectives().get()) {
+        for (Objective objective : indicator.objectives().get()) {
             app.getServices().getObjectiveService().updateObjectiveValue(objective, indicator);
         }
     }
